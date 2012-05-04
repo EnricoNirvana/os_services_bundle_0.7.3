@@ -1,0 +1,218 @@
+﻿A quick setup guide:
+====================
+
+
+Step 1 - Database Setup:
+=======================
+
+- Create a new MySQL database with a collation scheme of 'latin1_general_ci'.
+
+- Import the file named 'services_all.sql' located in the 'MySql_files' folder.
+
+- Make sure to select 'latin1_general_ci' or 'iso-8859-1' as the character set of the source file if that option is available.
+
+
+
+Step 2 - PHP Component Setup:
+=============================
+
+- Move/upload the 'os_services' folder located in the 'Web_files' folder within the webroot of your http server.
+
+- This location is where publicly accessible web pages are located and may be defined as follows based on your server environment:
+
+   /www (AMP stacks like XAMPP, WampServer, etc)
+
+   /var/www/html (Linux/Apache)
+ 
+   /var/www/htdocs (Linux/Apache)
+
+   /Library/WebServer/Documents (Mac OS X)
+
+   /inetpub/wwwroot (Microsoft IIS server)
+
+   /home/<user>/public_html (Linux/Apache: shared server)
+
+
+- Grant sufficient access privileges to all folders/files:
+
+   'read/write' for owner and group
+
+   'read only' for everyone
+
+   (this would be a CHMOD value of 775)
+
+
+- Open the 'config.php' file in a text editor and modify the settings for your database host, name, user and password to suit your specific environment.  Be sure to read the comments for suggestions and help.
+
+- If you want to add extra security to your Groups service, define a pair of access keys under 'Group Security' and add those to the [Groups] section of your 'OpenSim.ini' file.
+
+
+
+Step 3 - Binary Component Setup:
+================================
+
+- Find the 2 files named 'OpenSimProfile.Modules.dll' and 'OpenSimSearch.Modules.dll' in the 'OpenSim_files' folder of this distribution.
+
+- Move/upload them to the root directory of your OpenSim instance (usually the 'bin' folder or wherever your OpenSim executables and DLLs reside).
+
+
+
+Step 4 - OpenSim Config Files Setup:
+====================================
+
+** NOTE **
+
+The web paths suggested in the following steps assume you are running your web server on the default http port (80).  If you are using a non-standard port, please add this to the 'your_host' portion of the string - <your_host:port_number> or <127.0.0.1:8080> as an example.
+
+
+A. Groups
+---------
+
+- To enable the Groups service MODIFY the following lines in your 'OpenSim.ini' file (this applies to both standalone and grid modes):
+
+[Groups]
+
+    Enabled = true
+
+    Module = GroupsModule
+
+    MessagingEnabled = true
+
+    MessagingModule = GroupsMessagingModule
+
+    ServicesConnectorModule = XmlRpcGroupsServicesConnector
+
+    GroupsServerURI = "http://<your_host>/os_services/xmlrpc.php"
+
+    NoticesEnabled = true
+
+    DebugEnabled = false
+
+    (these should match the keys you defined in the 'config.php' file from the Groups web service folder)
+
+    XmlRpcServiceReadKey    = xxxx
+    XmlRpcServiceWriteKey   = xxxx
+
+
+
+B. Offline Messages
+-------------------
+
+- To enable Offline Messages MODIFY the following lines in your 'OpenSim.ini' file (this applies to both STANDALONE and GRID modes):
+
+
+[Messaging]
+
+    OfflineMessageModule = OfflineMessageModule
+
+    OfflineMessageURL = http://<your_host>/os_services/offline.php
+
+    MuteListModule = MuteListModule
+
+    ** Not currently used, but MUST be set to allow offline messaging to work **
+
+    MuteListURL = http://<your_host>/os_services/mute.php
+
+    ForwardOfflineGroupMessages = true
+
+
+- Additionally, if you're running in GRID mode with HYPERGRID enabled, change the following lines in your 'Robust.HG.ini' file to allow offline messages from users on other grids to be saved and delivered:
+
+
+[Messaging]
+
+    OfflineMessageURL = http://<your_host>/os_services/offline.php
+
+    ForwardOfflineGroupMessages = true
+
+
+
+
+C. Profiles
+-----------
+
+The following settings are the bare minimum needed to activate the Profiles module.
+
+
+- STANDALONE mode: ADD the following new section to your 'StandaloneCommon.ini' file:
+
+
+    [Profile]
+
+        Module = "OpenProfileModule"
+
+        ProfileURL = http://<your_host>/os_services/profile.php
+
+
+
+    Also, MODIFY the following line in the same file:
+
+
+    [LoginService]
+
+        SRV_ProfileServerURI = "http://<your_host>/os_services/profile.php"
+
+
+
+- GRID mode: ADD the following section to your 'GridCommon.ini' file.
+
+
+    [Profile]
+
+        Module = "OpenProfileModule"
+
+
+        ProfileURL = http://<your_host>/os_services/profile.php
+
+
+
+Also, MODIFY the following line in your 'Robust.HG.ini' file:
+
+
+    [LoginService]
+
+        SRV_ProfileServerURI = "http://<your host>/os_services/profile.php"
+
+
+
+
+D. Search
+---------
+
+- To enable the Search module ADD the following new section to your 'OpenSim.ini' file:
+
+
+    [Search]
+
+        SearchURL = http://<your host>/os_services/query.php
+
+
+- OPTIONAL: If you want certain elements of your sim(s) (other than people, groups and classifieds) to be indexed for searching you'll need to MODIFY the following lines in the same file:
+
+
+[DataSnapshot]
+
+    index_sims = true
+
+    gridname = "<your_grid_name>"
+
+    data_services="http://<your_host>/os_services/register.php"
+
+(the other variables in this section can be modified once you become more familiar with the indexing function)
+
+
+- Next, ADD the following lines to the [Modules] section of either your 'StandaloneCommon.ini' or 'GridCommon.ini' file depending on which architecture your OpenSim instance is running:
+
+
+    [Modules]
+
+        LandServices = "RemoteLandServiceConnector"
+
+        LandServiceInConnector = "true"
+
+
+** NOTE **  
+
+Your grid/regions need to be regularly inspected by the Data Snapshot Module in order to fill the database with up to date information about new and pre-existing searchable items.  This is accomplished by running the 'parser.php' script on a regular basis.  The easiest way to do this is to create a cron job (unix) or scheduled task (win/mac) to execute the parser.php script as a background task.
+
+Setting up cron jobs/scheduled tasks is beyond the scope of this guide, but there are several tutorials available on the interwebs.

@@ -1,0 +1,39 @@
+Contributors:
+=============
+
+The Flotsam Project (groups module)
+
+http://code.google.com/p/flotsam/wiki/XmlRpcGroups
+
+* Static Sprocket (Michael Cortez)
+* Godfrey
+* dratone
+* coyled
+
+
+OSModules project (offline message module)
+
+https://github.com/jor3l/OSModules
+
+* jor3l
+
+
+The OpenSim Profile project (profiles module)
+
+http://forge.opensimulator.org/gf/project/osprofile/
+
+* fly-man
+* Melanie Thielker
+* Kevin Cozens
+* Mark Idcas
+* Mike Schaefer
+
+
+The OpenSim Search project (search module)
+
+http://forge.opensimulator.org/gf/project/ossearch/
+
+* fly-man
+* Melanie Thielker
+* William Pinyon
+* Kevin Cozens

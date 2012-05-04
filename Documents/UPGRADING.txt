@@ -1,0 +1,35 @@
+Upgrading from a previous version:
+=====================================
+
+For users who already have the previous version of the services bundle installed and would like to upgrade to the current version, it's relatively painless - especially if you installed everything using the default values suggested in the documentation.  Here are the steps you should take:
+
+1. Backup your existing components -just in case-
+
+- your 'os_services' folder in your webroot
+
+- the 'OpenSimProfile.Modules.dll' and 'OpenSimSearch.Modules.dll' in your OpenSim /bin folder
+
+- your 'os_services' database
+
+(In case you need to make changes to them, back up the following as well)
+
+- your 'OpenSim.ini', 'StandaloneCommon.ini' -or- 'GridCommon.ini' and 'Robust/Robust.HG.ini' files.
+
+
+2. Replace the old 'os_services' web directory with the new one and make sure you assign the same permissions as before:
+
+- Read/Write' for Owner and Group
+
+- Read Only for everyone else 
+
+- or CHMOD 775
+
+[NOTE] This version of the bundle is designed to use a single configuration file for all services but reflects the SAME suggested installation paths as previous versions which utilized separate config files for each service.
+
+
+3. Replace your existing Profile and Search DLLs (located in your OpenSim /bin directory) with the ones found in the 'For OpenSim server' folder.
+
+
+4. Update your database.  This can be done by IMPORTING the 'services_update.sql' file in the 'For MySQL server > Update ONLY' folder into your existing 'os_services' database.  It should update some of the existing tables without altering your stored data.  Nonetheless, make that backup copy.
+
+Otherwise, you can always start with a fresh database, IMPORT the 'services_all.sql' and restore your OpenSim data from backups.
