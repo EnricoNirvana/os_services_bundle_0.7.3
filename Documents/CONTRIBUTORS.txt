@@ -15,7 +15,7 @@ OSModules project (offline message module)
 
 https://github.com/jor3l/OSModules
 
-* jor3l
+* José Vera
 
 
 The OpenSim Profile project (profiles module)
@@ -23,6 +23,7 @@ The OpenSim Profile project (profiles module)
 http://forge.opensimulator.org/gf/project/osprofile/
 
 * fly-man
+* BlueWall Slade
 * Melanie Thielker
 * Kevin Cozens
 * Mark Idcas
